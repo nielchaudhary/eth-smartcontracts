@@ -59,4 +59,18 @@ app.post('/transfer', (req:Request, res:Response)=>{
 
 })
 
+app.post('/approve', (req:Request, res:Response)=>{
+    const {ownerId, wallet, amount} = req.body;
+    if(!balances[ownerId]){
+        return res.send("User does not exist")
+    }
+
+    if(!allowances[ownerId]){
+        allowances[ownerId] = {};
+    }
+    allowances[ownerId][wallet] = amount;
+    return res.status(200).send(`${ownerId} has allowed ${wallet} to spend ${amount}`)
+})
+
+
 app.listen(3000)
