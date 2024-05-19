@@ -40,5 +40,23 @@ app.get('/balance', (req:Request, res:Response)=>{
 })
 
 
+app.post('/transfer', (req:Request, res:Response)=>{
+    const {sender, receiver, amount} = req.body;
+    if(!balances[sender || !balances[receiver]]){
+        return res.status(404).send("User doesn't exist")
+    }
+
+    if(balances[sender] < amount){
+        return res.status(408).send("Insufficient funds")
+    }
+
+    balances[sender] -= amount;
+    balances[receiver] += amount;
+
+    res.send(`Sent amount : ${amount} from ${sender} to ${receiver}`)
+    console.log(balances)
+
+
+})
 
 app.listen(3000)
