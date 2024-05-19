@@ -28,4 +28,17 @@ app.post('/create', (req:Request, res:Response)=>{
 
 })
 
+
+app.get('/balance', (req:Request, res:Response)=>{
+    const {userId} = req.body;
+    if(!balances[userId]){
+        return res.send("User doesn't exist")
+    }
+
+    const balance  = balances[userId];
+    res.send(`${userId} has ${balance} in their account.`)
+})
+
+
+
 app.listen(3000)
