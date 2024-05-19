@@ -73,4 +73,43 @@ app.post('/approve', (req:Request, res:Response)=>{
 })
 
 
+
+
+
+
+
+
+
+
+app.post('/transferViaWallet', (req:Request, res:Response)=>{
+
+    const {sender, receiver, wallet, amount} = req.body;
+
+    if(!balances[sender] || !balances[receiver]){
+        return res.status(400).send("User does not exist")
+    }
+
+    const allowedAmount = allowances[sender] && allowances[sender][wallet];
+    if(!allowedAmount || allowedAmount < amount){
+        return res.send("Insufficient allowance")
+    }
+
+    if(balances[sender] < amount){
+        return res.send("Insufficient funds")
+    }
+
+    balances[sender] -= amount;
+    balances[receiver] += amount;
+    allowances[sender][wallet] -= amount;
+    return res.status(200).send(`Successfully sent ${amount} token from ${receiver} to ${receiver} via ${wallet}`)
+
+})
+
+
+
+
+
+
+
+
 app.listen(3000)
